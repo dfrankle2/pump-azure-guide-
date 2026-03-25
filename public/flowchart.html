@@ -1,0 +1,334 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans, sans-serif); font-size: 14px; color: var(--color-text-primary); }
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tab-btn { padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; cursor: pointer; font-size: 13px; color: var(--color-text-secondary); transition: all .15s; white-space: nowrap; }
+  .tab-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+  .tab-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); font-weight: 500; }
+  .tab-panel { display: none; } .tab-panel.active { display: block; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 16px; margin-bottom: 12px; }
+  .card-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .card-sub { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 500; margin-right: 4px; }
+  .badge-paygo { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .badge-mcae  { background: var(--color-background-info);    color: var(--color-text-info); }
+  .badge-csp   { background: var(--color-background-success); color: var(--color-text-success); }
+  .badge-ea    { background: var(--color-background-danger);  color: var(--color-text-danger); }
+  .badge-misc  { background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); }
+  .badge-blocked { background: var(--color-background-danger); color: var(--color-text-danger); }
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 12px; align-items: flex-start; }
+  .step-line { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .step-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+  .step-connector { width: 1px; height: 20px; background: var(--color-border-tertiary); margin: 2px 0; }
+  .step-body { padding-bottom: 16px; flex: 1; min-width: 0; }
+  .step-title { font-size: 13px; font-weight: 500; line-height: 1.4; }
+  .step-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; margin-top: 3px; }
+  .step-note { font-size: 11px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 6px 10px; margin-top: 6px; color: var(--color-text-secondary); }
+  .dot-pump   { background: var(--color-background-info);    color: var(--color-text-info); }
+  .dot-cust   { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .dot-ingram { background: var(--color-background-success); color: var(--color-text-success); }
+  .dot-ms     { background: var(--color-background-danger);  color: var(--color-text-danger); }
+  .dot-both   { background: var(--color-background-secondary); color: var(--color-text-secondary); }
+  .decision-q { font-size: 13px; font-weight: 500; }
+  .decision-hint { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .decision-answers { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .ans-btn { padding: 5px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: 99px; font-size: 12px; cursor: pointer; background: transparent; color: var(--color-text-primary); transition: all .15s; }
+  .ans-btn:hover { background: var(--color-background-secondary); }
+  .result-box { border-radius: var(--border-radius-md); padding: 12px 14px; margin-top: 10px; display: none; font-size: 12px; line-height: 1.6; }
+  .result-box.show { display: block; }
+  .info-item { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 10px; overflow: hidden; }
+  .info-header { padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .info-header:hover { background: var(--color-background-secondary); }
+  .info-label { font-size: 13px; font-weight: 500; }
+  .info-body { padding: 10px 14px; border-top: 0.5px solid var(--color-border-tertiary); display: none; font-size: 12px; color: var(--color-text-secondary); line-height: 1.8; }
+  .info-body.open { display: block; }
+  .code-pill { display: inline-block; background: var(--color-background-secondary); border-radius: 4px; padding: 2px 7px; font-family: var(--font-mono, monospace); font-size: 11px; color: var(--color-text-primary); }
+  .path-select { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .path-btn { padding: 6px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: 99px; font-size: 12px; cursor: pointer; background: transparent; color: var(--color-text-secondary); transition: all .15s; }
+  .path-btn:hover { background: var(--color-background-secondary); }
+  .path-btn.active { background: var(--color-background-success); color: var(--color-text-success); border-color: var(--color-border-success); font-weight: 500; }
+  .path-panel { display: none; } .path-panel.active { display: block; }
+  .who-tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 99px; font-weight: 500; margin-left: 6px; vertical-align: middle; }
+  .who-pump   { background: var(--color-background-info);    color: var(--color-text-info); }
+  .who-cust   { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .who-ingram { background: var(--color-background-success); color: var(--color-text-success); }
+  .who-ms     { background: var(--color-background-danger);  color: var(--color-text-danger); }
+  .section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--color-text-tertiary); margin: 16px 0 8px; }
+  .tip-box { background: var(--color-background-info); border-left: 3px solid var(--color-border-info); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 8px 12px; margin-top: 8px; font-size: 12px; color: var(--color-text-info); line-height: 1.6; }
+  .warn-box { background: var(--color-background-warning); border-left: 3px solid var(--color-border-warning); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 8px 12px; margin-top: 8px; font-size: 12px; color: var(--color-text-warning); line-height: 1.6; }
+  .block-box { background: var(--color-background-danger); border-left: 3px solid var(--color-border-danger); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 8px 12px; margin-top: 6px; font-size: 12px; color: var(--color-text-danger); line-height: 1.6; }
+  .pull-step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+  .pull-num { width: 26px; height: 26px; border-radius: 50%; border: 0.5px solid var(--color-border-secondary); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; color: var(--color-text-secondary); }
+  .pull-body { flex: 1; }
+  .pull-title { font-size: 13px; font-weight: 500; }
+  .pull-desc { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; line-height: 1.6; }
+  .method-tabs { display: flex; gap: 0; margin-bottom: 16px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); overflow: hidden; }
+  .method-btn { flex: 1; padding: 10px 12px; background: transparent; border: none; cursor: pointer; font-size: 12px; color: var(--color-text-secondary); transition: all .15s; text-align: left; border-right: 0.5px solid var(--color-border-tertiary); line-height: 1.4; }
+  .method-btn:last-child { border-right: none; }
+  .method-btn:hover { background: var(--color-background-secondary); }
+  .method-btn.active { background: var(--color-background-secondary); color: var(--color-text-primary); }
+  .method-btn .m-label { font-weight: 500; font-size: 13px; display: block; }
+  .method-btn .m-sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; display: block; }
+  .method-btn.active .m-sub { color: var(--color-text-secondary); }
+  .method-panel { display: none; } .method-panel.active { display: block; }
+  .csv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .csv-card { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+  .csv-num { font-size: 10px; font-weight: 500; color: var(--color-text-tertiary); margin-bottom: 3px; }
+  .csv-title { font-size: 12px; font-weight: 500; }
+  .csv-group { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .misc-pill { display: inline-block; padding: 2px 9px; border-radius: 99px; font-size: 11px; font-weight: 500; margin: 2px 3px 2px 0; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-secondary); }
+</style>
+
+<div style="padding: 1rem 0;">
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('identify')">1. Identify billing type</button>
+  <button class="tab-btn" onclick="switchTab('estimate')">2. Run an estimate</button>
+  <button class="tab-btn" onclick="switchTab('onboard')">3. Onboarding flows</button>
+  <button class="tab-btn" onclick="switchTab('gather')">4. Info to gather</button>
+</div>
+
+<!-- TAB 1: IDENTIFY -->
+<div class="tab-panel active" id="tab-identify">
+  <div class="card"><div class="card-title">Quick identification cheat sheet</div><div class="card-sub">Ask the customer how they pay their Azure bill before anything else.</div></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+    <div class="card" style="border-left:3px solid #BA7517;">
+      <div style="margin-bottom:6px;"><span class="badge badge-paygo">PAYGO</span></div>
+      <div class="card-title">Pay-as-you-go / customer MCA</div>
+      <div class="card-sub">• Plan = <span class="code-pill">Azure Plan</span><br>• Paid via <b>credit card</b><br>• Billed directly by Microsoft<br>• "MCA" in portal but no enterprise terms<br>• No Microsoft account team</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #185FA5;">
+      <div style="margin-bottom:6px;"><span class="badge badge-mcae">MCA-E</span></div>
+      <div class="card-title">Microsoft Customer Agreement – Enterprise</div>
+      <div class="card-sub">• Plan = <span class="code-pill">Azure Plan</span><br>• Paid via <b>invoice (NET 30)</b> from Microsoft<br>• Confirm by pulling an invoice — biller = Microsoft<br>• Does <b>not</b> necessarily mean they have a Microsoft account team</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #3B6D11;">
+      <div style="margin-bottom:6px;"><span class="badge badge-csp">CSP</span></div>
+      <div class="card-title">Cloud Solution Provider</div>
+      <div class="card-sub">• Invoice from a <b>partner</b>, not Microsoft<br>• Billing owned by a reseller/distributor<br>• Ask: "Who do you pay your Azure bill to?"</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #A32D2D;">
+      <div style="margin-bottom:6px;"><span class="badge badge-ea">EA</span></div>
+      <div class="card-title">Enterprise Agreement</div>
+      <div class="card-sub">• Portal shows <span class="code-pill">Enterprise Agreement</span> + enrollment number<br>• <b>Means:</b> they have a Microsoft account team<br>• <b>Does not mean:</b> annual spend commitment (separate concept)<br>• <b>Direct EA</b> → can transfer to CSP directly<br>• <b>Indirect EA</b> → must go MCA-E first, then CSP<br>• No new EAs sold — existing ones are transferable</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #888780; grid-column: 1 / -1;">
+      <div style="margin-bottom:10px;"><span class="badge badge-misc">Misc / Other</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+
+        <div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:4px;"><span class="misc-pill">Sponsorship</span> Microsoft for Startups</div>
+          <div class="card-sub">Customer has Azure credits through a Microsoft startup program. May have little or no real billing yet — credits cover spend.</div>
+          <div class="block-box"><b>Cannot work with Pump until credits expire.</b> Track expiry date and follow up.</div>
+        </div>
+
+        <div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:4px;"><span class="misc-pill">MAC</span> = EDP</div>
+          <div class="card-sub">Microsoft Azure Consumption Commitment / Enterprise Discount Program. Customer has committed to a minimum Azure spend in exchange for discounts. Special commercial arrangement with Microsoft.</div>
+          <div class="block-box"><b>Cannot work with Pump until MAC expires.</b> Get the expiry date — put a reminder to follow up.</div>
+        </div>
+
+        <div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:4px;"><span class="misc-pill">ISV</span> Independent Software Vendor</div>
+          <div class="card-sub">Typically has a special relationship with Microsoft — may include co-sell agreements, ISV discounts, marketplace benefits, or dedicated Microsoft resources.</div>
+          <div class="warn-box" style="margin-top:6px;">Complexity varies. Confirm what benefits they have before starting — some may not carry over to CSP. Escalate to Ingram.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Step-by-step identification</div>
+  <div class="card">
+    <div class="decision-q">How does the customer pay Azure?</div>
+    <div class="decision-hint">Ask this on the call before anything else.</div>
+    <div class="decision-answers">
+      <button class="ans-btn" onclick="showResult('r1a')">Credit card</button>
+      <button class="ans-btn" onclick="showResult('r1b')">Invoice / NET terms from Microsoft</button>
+      <button class="ans-btn" onclick="showResult('r1c')">Invoice from a partner/reseller</button>
+      <button class="ans-btn" onclick="showResult('r1d')">Microsoft account team / enrollment</button>
+      <button class="ans-btn" onclick="showResult('r1e')">Credits / startup program / special deal</button>
+    </div>
+    <div class="result-box" id="r1a" style="background:var(--color-background-warning);"><span class="badge badge-paygo">PAYGO</span> Confirm: Subscriptions → click sub → Plan = "Azure Plan." Path: PAYGO → MCA-E → CSP. Needs Microsoft + 20% ACR growth justification.</div>
+    <div class="result-box" id="r1b" style="background:var(--color-background-info);"><span class="badge badge-mcae">MCA-E</span> Confirm by invoice — biller = Microsoft, NET 30 terms. Note: MCA-E does not mean they have a Microsoft account team. Path: MCA-E → CSP via Ingram "easy button."</div>
+    <div class="result-box" id="r1c" style="background:var(--color-background-success);"><span class="badge badge-csp">CSP</span> Ask who the partner is. Path: CSP → CSP transfer. Need current CSP tenant ID — customer must ask their CSP directly.</div>
+    <div class="result-box" id="r1d" style="background:var(--color-background-danger);"><span class="badge badge-ea">EA</span> Microsoft account team = EA. Check portal for enrollment number. <b>Direct EA:</b> straight to CSP. <b>Indirect EA:</b> MCA-E first, then CSP. Confirm which with Ingram.</div>
+    <div class="result-box" id="r1e" style="background:var(--color-background-danger);"><span class="badge badge-blocked">Blocked</span> <b>Sponsorship (credits):</b> cannot work with Pump until credits expire — get expiry date.<br><b>MAC/EDP:</b> cannot work with Pump until MAC expires — get expiry date.<br><b>ISV:</b> may be workable — escalate to Ingram to assess what benefits could be affected.</div>
+  </div>
+  <div class="tip-box">Portal shortcut: Cost Management + Billing → Billing scopes → Properties → "Agreement type." Fastest confirm: pull an invoice — who is the biller and what are the payment terms?</div>
+</div>
+
+<!-- TAB 2: ESTIMATE -->
+<div class="tab-panel" id="tab-estimate">
+  <div class="card"><div class="card-title">Choose the right data pull method</div><div class="card-sub">Method 1 preferred when available. Use Method 2 when PAYGO or CSP customers don't have usage file access.</div></div>
+  <div class="method-tabs">
+    <button class="method-btn active" onclick="switchMethod('m1')"><span class="m-label">Method 1 — Usage file download</span><span class="m-sub">Preferred · MCA-E, EA, some PAYGO/CSP</span></button>
+    <button class="method-btn" onclick="switchMethod('m2')"><span class="m-label">Method 2 — Cost Management export</span><span class="m-sub">Fallback · PAYGO or CSP without usage file access · ~3–5 min</span></button>
+  </div>
+  <div class="method-panel active" id="method-m1">
+    <div class="section-label">Steps — MCA-E / PAYGO</div>
+    <div class="pull-step"><div class="pull-num">1</div><div class="pull-body"><div class="pull-title">Navigate to Cost Management + Billing</div><div class="pull-desc">Azure Portal → search <span class="code-pill">Cost Management + Billing</span></div></div></div>
+    <div class="pull-step"><div class="pull-num">2</div><div class="pull-body"><div class="pull-title">Open each billing scope</div><div class="pull-desc">Billing scopes → click scope name. Repeat for each if multiple.</div></div></div>
+    <div class="pull-step"><div class="pull-num">3</div><div class="pull-body"><div class="pull-title">Shortcuts → Download usage and prices</div><div class="pull-desc">Scroll down on billing scope overview. Under <b>Shortcuts</b>, click <b>Download usage and prices</b>.</div></div></div>
+    <div class="pull-step"><div class="pull-num">4</div><div class="pull-body"><div class="pull-title">Prepare Azure usage file — last 3 months</div><div class="pull-desc">Under "Azure usage file," click <b>Prepare</b> for each of the last 3 months. Bell icon (top right) when ready.</div></div></div>
+    <div class="pull-step"><div class="pull-num">5</div><div class="pull-body"><div class="pull-title">Download each CSV → send all 3 to Pump</div></div></div>
+    <div class="tip-box">Alt: Billing → Invoices → ellipsis (…) → "Prepare Azure usage file."</div>
+    <div class="section-label" style="margin-top:16px;">For EA customers</div>
+    <div class="pull-step"><div class="pull-num">1</div><div class="pull-body"><div class="pull-title">Cost Management + Billing → select EA billing scope</div></div></div>
+    <div class="pull-step"><div class="pull-num">2</div><div class="pull-body"><div class="pull-title">Usage + charges → Download for each of last 3 months</div></div></div>
+    <div class="pull-step"><div class="pull-num">3</div><div class="pull-body"><div class="pull-title">Select "All charges including RI" → Prepare document → Download CSV</div></div></div>
+  </div>
+  <div class="method-panel" id="method-m2">
+    <div class="tip-box" style="margin-bottom:14px;"><b>When to use:</b> PAYGO or CSP customer can't access the usage file. Requires "Cost Management Reader" or higher. ~3–5 minutes.<br><br><b>Privacy note:</b> No customer data, no proprietary code — only service usage and costs. GDPR-compliant.</div>
+    <div class="section-label">Initial setup (do once)</div>
+    <div class="pull-step"><div class="pull-num">1</div><div class="pull-body"><div class="pull-title">Navigate to Cost Management in Azure Portal</div><div class="pull-desc"><span class="code-pill">Cost Management</span> (not Cost Management + Billing)</div></div></div>
+    <div class="pull-step"><div class="pull-num">2</div><div class="pull-body"><div class="pull-title">Select broadest billing scope covering all subscriptions</div></div></div>
+    <div class="pull-step"><div class="pull-num">3</div><div class="pull-body"><div class="pull-title">Set date range → Last 3 months, granularity → Daily</div><div class="pull-desc">Keep these identical across all 4 exports.</div></div></div>
+    <div class="section-label" style="margin-top:4px;">Export 4 CSV files</div>
+    <div class="csv-grid">
+      <div class="csv-card"><div class="csv-num">File 1</div><div class="csv-title">By Service Name</div><div class="csv-group">Group by → Service Name → Download CSV</div></div>
+      <div class="csv-card"><div class="csv-num">File 2</div><div class="csv-title">By Reservation</div><div class="csv-group">Group by → Reservation → Download CSV</div></div>
+      <div class="csv-card"><div class="csv-num">File 3</div><div class="csv-title">By Subscription</div><div class="csv-group">Group by → Subscription → Download CSV</div></div>
+      <div class="csv-card"><div class="csv-num">File 4</div><div class="csv-title">By Pricing Model</div><div class="csv-group">Group by → Pricing Model → Download CSV</div></div>
+    </div>
+    <div class="warn-box">Keep date range and granularity <b>identical</b> across all 4. Inconsistent settings break data comparison.</div>
+  </div>
+  <div class="section-label" style="margin-top:20px;">What Pump does with the data</div>
+  <div class="steps">
+    <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Run savings algorithm <span class="who-tag who-pump">Pump</span></div><div class="step-desc">Identifies ON_DEMAND workloads with 7+ consecutive days. Applies RI/SP discount rates with risk threshold. Target: 70–80% coverage of on-demand spend.</div></div></div>
+    <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Build estimate by category <span class="who-tag who-pump">Pump</span></div><div class="step-desc">Compute (VMs — usually biggest), Capacity (existing commitments), Databases. Shows current → Pump spend → savings %.</div></div></div>
+    <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div></div><div class="step-body"><div class="step-title">Walk estimate on a call <span class="who-tag who-pump">Pump</span></div><div class="step-desc">Key points: savings by category, RI + SP layering, $50K/12-month rolling return, no-risk policy, no lock-in. Don't share granular recommendations pre-close.</div><div class="warn-box" style="margin-top:8px;"><b>PAYGO → MCA-E form:</b> Microsoft needs Azure <b>growth</b> narrative (20%+ ACR) — not cost savings. Frame as expanding with Azure OpenAI, AKS, SQL MI, etc.</div></div></div>
+  </div>
+</div>
+
+<!-- TAB 3: ONBOARDING -->
+<div class="tab-panel" id="tab-onboard">
+  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
+    <span class="who-tag who-pump">Pump</span><span class="who-tag who-cust">Customer</span><span class="who-tag who-ingram">Ingram</span><span class="who-tag who-ms">Microsoft</span>
+  </div>
+  <div class="path-select">
+    <button class="path-btn active" onclick="switchPath('paygo')">PAYGO → CSP</button>
+    <button class="path-btn" onclick="switchPath('mcae')">MCA-E → CSP</button>
+    <button class="path-btn" onclick="switchPath('ea')">EA → CSP</button>
+    <button class="path-btn" onclick="switchPath('csp')">CSP → CSP</button>
+  </div>
+
+  <div class="path-panel active" id="path-paygo">
+    <div class="warn-box" style="margin-bottom:14px;">Longest path — Microsoft must create MCA-E first. Can take weeks. Needs 20%+ ACR growth justification.</div>
+    <div class="steps">
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">1. Customer agrees to onboard <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">2. Fill out MCA-E form → send to Ingram <span class="who-tag who-pump">Pump</span></div><div class="step-desc">Need: all sub IDs, billing owner name/email, billing address, growth justification.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-ingram">I</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">3. Ingram sends form to Microsoft (Alex PSM) <span class="who-tag who-ingram">Ingram</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-ms">M</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">4. Microsoft sets up PAYGO → MCA-E transfer <span class="who-tag who-ms">Microsoft</span></div><div class="step-desc">Unmanaged/no CSA: straightforward. Managed: account team must initiate. Digital CSA customers lose their CSA — flag this upfront.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">5. Customer (billing owner) accepts MCA-E proposal link <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">6. Customer transfers PAYGO subs to MCA-E billing <span class="who-tag who-cust">Customer</span></div><div class="step-desc">Consider screen-sharing here.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">7. Customer accepts Ingram CSP relationship link <span class="who-tag who-cust">Customer</span></div><div class="step-note">US: 6949071 · EU: 7010099 · AU: 7022415 · SG: 7062930</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">8. Resource extract (CSV) <span class="who-tag who-cust">Customer</span> <span class="who-tag who-pump">Pump</span></div><div class="step-desc">All resources → Export to CSV → send to Ingram proserve. Check for blockers. Do anytime between steps 2–9. Don't skip.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">9. xVantage: request new CSP sub <span class="who-tag who-pump">Pump</span></div><div class="step-desc">"Register a new Microsoft Azure sub in an existing domain." Use .onmicrosoft domain. Anytime between steps 7–11.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">10. Customer grants Ingram GDAP <span class="who-tag who-cust">Customer</span></div><div class="step-desc">730-day delegated access. Must complete BEFORE MCA-E → CSP transfer.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-ingram">I</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">11. Ingram submits MCA-E → CSP transfer <span class="who-tag who-ingram">Ingram</span> <span class="who-tag who-pump">Pump</span> <span class="who-tag who-cust">Customer</span></div><div class="step-desc">Proserve generates transfer link. Requires billing owner on call or async.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-ingram">I</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">12. Customer grants Ingram AOBO (Cloud Shell script) <span class="who-tag who-ingram">Ingram</span> <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">13. Switch sub to Ingram sub <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div></div><div class="step-body"><div class="step-title">14. Onboard to Pump <span class="who-tag who-pump">Pump</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="path-panel" id="path-mcae">
+    <div class="tip-box" style="margin-bottom:14px;">Most common path. Ingram "easy button." Requires GDAP before transfer.</div>
+    <div class="steps">
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">1. Customer agrees to onboard <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">2. Customer accepts Ingram CSP relationship link <span class="who-tag who-cust">Customer</span></div><div class="step-note">US: 6949071 · EU: 7010099 · AU: 7022415 · SG: 7062930</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">3. Resource extract (CSV) <span class="who-tag who-cust">Customer</span> <span class="who-tag who-pump">Pump</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">4. xVantage: request new CSP sub <span class="who-tag who-pump">Pump</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">5. Customer grants Ingram GDAP <span class="who-tag who-cust">Customer</span></div><div class="step-desc">Must complete before transfer.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-ingram">I</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">6. Ingram submits MCA-E → CSP transfer ("easy button") <span class="who-tag who-ingram">Ingram</span></div><div class="step-desc">Requires billing owner on call or async.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-ingram">I</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">7. Customer grants Ingram AOBO <span class="who-tag who-ingram">Ingram</span> <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">8. Switch sub to Ingram sub <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div></div><div class="step-body"><div class="step-title">9. Onboard to Pump <span class="who-tag who-pump">Pump</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="path-panel" id="path-ea">
+    <div class="warn-box" style="margin-bottom:14px;">EA = customer has a Microsoft account team. Two types with different paths — confirm with Ingram which applies. Credits and usage history don't transfer — export history first.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div class="card" style="border-left:3px solid #3B6D11;"><div class="card-title" style="color:var(--color-text-success);">Direct EA → straight to CSP</div><div class="card-sub">Can transfer directly to CSP. Skip the MCA-E phase. Simpler and faster.</div></div>
+      <div class="card" style="border-left:3px solid #A32D2D;"><div class="card-title" style="color:var(--color-text-danger);">Indirect EA → MCA-E required first</div><div class="card-sub">Cannot go directly to CSP. Must complete EA → MCA-E → CSP. Two-phase migration.</div></div>
+    </div>
+    <div class="section-label">Indirect EA path</div>
+    <div class="steps">
+      <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">1. Fill out MCA-E form <span class="who-tag who-pump">Pump</span></div><div class="step-desc">Include sub IDs, billing owner, address, growth justification.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-ingram">I</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">2. Ingram submits to Microsoft <span class="who-tag who-ingram">Ingram</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">3. Customer accepts MCA-E + transfers EA subs <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-both">→</div></div><div class="step-body"><div class="step-title">4. Continue with MCA-E → CSP flow above</div></div></div>
+    </div>
+    <div class="tip-box" style="margin-top:4px;">Direct EA: skip steps 1–3 and go straight into the MCA-E → CSP flow starting from the relationship link.</div>
+  </div>
+
+  <div class="path-panel" id="path-csp">
+    <div class="tip-box" style="margin-bottom:14px;">Fastest path. Main blocker: current CSP must agree to release.</div>
+    <div class="steps">
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">1. Customer accepts Ingram relationship link <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">2. xVantage: request sub in existing domain <span class="who-tag who-pump">Pump</span></div><div class="step-desc">Need: .onmicrosoft domain, billing address, admin email/phone.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">3. Customer grants Ingram GDAP <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-ingram">I</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">4. Ingram sends CSP transfer request to current CSP <span class="who-tag who-ingram">Ingram</span></div><div class="step-note">Current CSP tenant ID required — customer must ask their CSP directly. Not visible in portal.</div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-ingram">I</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">5. AOBO — after current CSP agrees <span class="who-tag who-ingram">Ingram</span> <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-cust">C</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">6. Switch sub to Ingram sub <span class="who-tag who-cust">Customer</span></div></div></div>
+      <div class="step"><div class="step-line"><div class="step-dot dot-pump">P</div></div><div class="step-body"><div class="step-title">7. Onboard to Pump <span class="who-tag who-pump">Pump</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="warn-box" style="margin-top:14px;"><b>Irreversible:</b> CSP transfers are permanent. Returning to EA/MCA-E requires manual resource migration with potential downtime.</div>
+</div>
+
+<!-- TAB 4 -->
+<div class="tab-panel" id="tab-gather">
+  <div class="card"><div class="card-title">First call checklist</div><div class="card-sub">Gather all of this before any forms are filled. Click each item for how to find it.</div></div>
+  <div class="info-item"><div class="info-header" onclick="toggleInfo('i1')"><div><div class="info-label">Subscription ID(s)</div><div style="font-size:11px;color:var(--color-text-tertiary);">Most important — required for MCA-E form</div></div><span style="font-size:14px;color:var(--color-text-tertiary);" id="i1-arrow">+</span></div><div class="info-body" id="i1">Azure Portal → search "Subscriptions" → copy the Subscription ID (GUID). If multiple, list all and flag which is primary (highest spend).<br><br><b>Alt:</b> Cost Management + Billing → Billing scopes → Properties<br><br><b>Example:</b> <span class="code-pill">3caa64a7-47f1-434c-bf3e-1a5ac4e106ff</span></div></div>
+  <div class="info-item"><div class="info-header" onclick="toggleInfo('i2')"><div><div class="info-label">Tenant ID</div><div style="font-size:11px;color:var(--color-text-tertiary);">For xVantage provisioning and CSP→CSP transfers</div></div><span style="font-size:14px;color:var(--color-text-tertiary);" id="i2-arrow">+</span></div><div class="info-body" id="i2"><b>If you have the .onmicrosoft domain:</b><br><span class="code-pill">login.microsoftonline.com/DOMAIN.onmicrosoft.com/metadata/json/1</span><br><br><b>If you have the tenant ID:</b><br><span class="code-pill">login.microsoftonline.com/TENANT-ID/metadata/json/1</span><br><br><b>In portal:</b> Azure Active Directory → Overview → Tenant ID<br><br><b>CSP→CSP:</b> Customer cannot see current CSP's tenant ID — they must ask their CSP directly.</div></div>
+  <div class="info-item"><div class="info-header" onclick="toggleInfo('i3')"><div><div class="info-label">.onmicrosoft domain</div><div style="font-size:11px;color:var(--color-text-tertiary);">Required for xVantage "existing domain" setup</div></div><span style="font-size:14px;color:var(--color-text-tertiary);" id="i3-arrow">+</span></div><div class="info-body" id="i3">Format: <span class="code-pill">companyname.onmicrosoft.com</span><br><br>Azure Active Directory → Overview → Primary domain<br>OR Microsoft 365 Admin Center → Settings → Domains<br><br>Use .onmicrosoft in xVantage — not the custom domain.</div></div>
+  <div class="info-item"><div class="info-header" onclick="toggleInfo('i4')"><div><div class="info-label">Billing account owner (name + email)</div><div style="font-size:11px;color:var(--color-text-tertiary);">Must sign MCA-E and attend transfer calls</div></div><span style="font-size:14px;color:var(--color-text-tertiary);" id="i4-arrow">+</span></div><div class="info-body" id="i4">Cost Management + Billing → Billing scopes → Access control (IAM) → Owner role<br><br>Must be in same tenant/domain as subscriptions. Cross-tenant billing owners cause transfer failures.<br><br>Required on the Ingram "easy button" call — global admin OR billing owner.</div></div>
+  <div class="info-item"><div class="info-header" onclick="toggleInfo('i5')"><div><div class="info-label">Billing address + admin contact</div><div style="font-size:11px;color:var(--color-text-tertiary);">For MCA-E form and xVantage</div></div><span style="font-size:14px;color:var(--color-text-tertiary);" id="i5-arrow">+</span></div><div class="info-body" id="i5">• Legal company billing address<br>• Azure admin email<br>• Azure admin phone<br>• VAT number (optional — include for EU/international)</div></div>
+  <div class="info-item"><div class="info-header" onclick="toggleInfo('i6')"><div><div class="info-label">Billing type confirmation</div><div style="font-size:11px;color:var(--color-text-tertiary);">Determines which onboarding path</div></div><span style="font-size:14px;color:var(--color-text-tertiary);" id="i6-arrow">+</span></div><div class="info-body" id="i6">Ask: <b>"Who do you pay your Azure bill to, and how?"</b><br><br>• Credit card → PAYGO<br>• NET 30 invoice from Microsoft → MCA-E<br>• Invoice from a partner → CSP<br>• Microsoft account team / enrollment number → EA (confirm direct or indirect with Ingram)<br>• Credits / startup program / MAC / special deal → Misc — get expiry date, cannot proceed until expired</div></div>
+  <div class="info-item"><div class="info-header" onclick="toggleInfo('i7')"><div><div class="info-label">CSP→CSP only: current CSP tenant ID</div><div style="font-size:11px;color:var(--color-text-tertiary);">Not visible in portal — customer must ask their CSP</div></div><span style="font-size:14px;color:var(--color-text-tertiary);" id="i7-arrow">+</span></div><div class="info-body" id="i7">Not visible in the Azure portal.<br><br>Tell them to ask: <b>"We need your CSP Tenant ID for a billing transition."</b><br><br>Some CSPs push back — customer escalating internally helps.</div></div>
+  <div class="info-item"><div class="info-header" onclick="toggleInfo('i8')"><div><div class="info-label">Special relationships (Sponsorship, MAC, ISV)</div><div style="font-size:11px;color:var(--color-text-tertiary);">Sponsorship and MAC = blocked until expiry</div></div><span style="font-size:14px;color:var(--color-text-tertiary);" id="i8-arrow">+</span></div><div class="info-body" id="i8"><b>Sponsorship / Microsoft for Startups:</b> Azure credits cover their spend. Cannot work with Pump until credits expire. Get the expiry date and set a follow-up reminder.<br><br><b>MAC / EDP:</b> Minimum Azure spend commitment in exchange for discounts. Cannot work with Pump until MAC expires. Get the expiry date and set a follow-up reminder.<br><br><b>ISV:</b> Special Microsoft relationship — co-sell, marketplace benefits, dedicated resources. Complexity varies. Escalate to Ingram to assess what would be affected in a CSP transition.</div></div>
+</div>
+
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+function switchPath(id) {
+  document.querySelectorAll('.path-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.path-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('path-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+function switchMethod(id) {
+  document.querySelectorAll('.method-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('method-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+function showResult(id) {
+  document.querySelectorAll('.result-box').forEach(r => r.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
+function toggleInfo(id) {
+  const body = document.getElementById(id);
+  const arrow = document.getElementById(id + '-arrow');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  arrow.textContent = isOpen ? '+' : '−';
+}
+</script>
