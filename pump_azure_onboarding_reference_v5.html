@@ -1,7 +1,36 @@
 
 <style>
+  :root {
+    --font-sans: 'DM Sans', sans-serif;
+    --font-mono: monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+
+    --color-text-primary:    #f0f4ff;
+    --color-text-secondary:  #8899bb;
+    --color-text-tertiary:   #4a5a7a;
+    --color-text-info:       #60b4ff;
+    --color-text-warning:    #fbbf24;
+    --color-text-success:    #34d399;
+    --color-text-danger:     #f87171;
+
+    --color-background-primary:   #111827;
+    --color-background-secondary: #1a2235;
+    --color-background-info:      rgba(0, 163, 255, 0.12);
+    --color-background-warning:   rgba(251, 191, 36, 0.12);
+    --color-background-success:   rgba(52, 211, 153, 0.12);
+    --color-background-danger:    rgba(248, 113, 113, 0.12);
+
+    --color-border-primary:   rgba(255,255,255,0.12);
+    --color-border-secondary: rgba(255,255,255,0.07);
+    --color-border-tertiary:  rgba(255,255,255,0.05);
+    --color-border-info:      rgba(0, 163, 255, 0.4);
+    --color-border-warning:   rgba(251, 191, 36, 0.4);
+    --color-border-success:   rgba(52, 211, 153, 0.4);
+    --color-border-danger:    rgba(248, 113, 113, 0.4);
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-sans, sans-serif); font-size: 14px; color: var(--color-text-primary); }
+  body { font-family: var(--font-sans, sans-serif); font-size: 14px; color: var(--color-text-primary); background: #0a0f1e; }
   .tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
   .tab-btn { padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; cursor: pointer; font-size: 13px; color: var(--color-text-secondary); transition: all .15s; white-space: nowrap; }
   .tab-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
