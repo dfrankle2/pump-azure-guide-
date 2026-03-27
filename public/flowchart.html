@@ -325,10 +325,10 @@
   <div class="pull-step"><div class="pull-num">1</div><div class="pull-body"><div class="pull-title">Azure Portal → Cost Management + Billing</div></div></div>
   <div class="pull-step"><div class="pull-num">2</div><div class="pull-body"><div class="pull-title">Select the correct Billing Account (the MCA-E one)</div><div class="pull-desc">Under Billing scope, select the MCA-E billing account.</div></div></div>
   <div class="pull-step"><div class="pull-num">3</div><div class="pull-body"><div class="pull-title">Left menu → Access control (IAM)</div></div></div>
-  <div class="pull-step"><div class="pull-num">4</div><div class="pull-body"><div class="pull-title">+ Add → Add role assignment</div><div class="pull-desc">Select role: <b>Billing account owner</b>. Search for and select the user. Click Save.</div></div></div>
+  <div class="pull-step" style="margin-bottom:16px;"><div class="pull-num">4</div><div class="pull-body"><div class="pull-title">+ Add → Add role assignment</div><div class="pull-desc">Select role: <b>Billing account owner</b>. Search for and select the user. Click Save.</div></div></div>
 
   <!-- Key rules table -->
-  <div class="section-label" style="margin-top:4px;">Key rules</div>
+  <div class="section-label">Key rules</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
     <div class="card"><div class="card-title">Must be in the same tenant</div><div class="card-sub">The Billing Account Owner must be a <b>member user</b> in the tenant that holds the MCA-E billing account. Guest/B2B accounts cannot hold billing roles for transfer purposes.</div></div>
     <div class="card"><div class="card-title">Global Admin ≠ Billing Owner</div><div class="card-sub">Being an Entra Global Admin does <b>not</b> automatically make someone a Billing Account Owner — they are separate roles that must be assigned independently.</div></div>
@@ -339,7 +339,7 @@
   <!-- Quick checklist -->
   <div class="section-label">Quick checklist before initiating the transfer</div>
   <div class="card">
-    <div class="card-sub" style="line-height:2;">
+    <div class="card-sub" style="line-height:2.2;">
       ☐ &nbsp;Correct billing account identified (the MCA-E one, not a PAYGO profile)<br>
       ☐ &nbsp;User exists as a <b>member</b> (not guest) in that tenant<br>
       ☐ &nbsp;User has Billing Account Owner role under Cost Management + Billing → Access control (IAM)<br>
@@ -350,16 +350,13 @@
 
   <!-- Export quotas -->
   <div class="section-label" style="margin-top:20px;">Export quotas</div>
-  <div class="tip-box" style="margin-bottom:12px;"><b>Why export quotas?</b> Quotas are reset when a subscription moves between billing types or tenants. Exporting before the transfer gives you a record to request quota restoration if needed.</div>
-  <div class="card"><div class="card-title">Method 1 — Azure Portal (quick, visual, per-region)</div>
-    <div class="card-sub" style="margin-top:6px;">
-      <div class="pull-step"><div class="pull-num">1</div><div class="pull-body"><div class="pull-title">Go to <span class="code-pill">portal.azure.com</span></div></div></div>
-      <div class="pull-step"><div class="pull-num">2</div><div class="pull-body"><div class="pull-title">Search "Quotas" in the top search bar and select it</div></div></div>
-      <div class="pull-step"><div class="pull-num">3</div><div class="pull-body"><div class="pull-title">Select "Compute" (or the service type needed)</div><div class="pull-desc">Options include Storage, Networking, etc.</div></div></div>
-      <div class="pull-step"><div class="pull-num">4</div><div class="pull-body"><div class="pull-title">Filter by Subscription and Region</div></div></div>
-      <div class="pull-step"><div class="pull-num">5</div><div class="pull-body"><div class="pull-title">Click Export to CSV in the top command bar</div></div></div>
-    </div>
-  </div>
+  <div class="tip-box" style="margin-bottom:12px;"><b>Why export quotas?</b> Quotas are reset when a subscription moves between billing types or tenants. Export before the transfer so you have a record to request restoration if needed.</div>
+  <div class="card"><div class="card-title">Method 1 — Azure Portal (quick, visual, per-region)</div></div>
+  <div class="pull-step"><div class="pull-num">1</div><div class="pull-body"><div class="pull-title">Go to <span class="code-pill">portal.azure.com</span></div></div></div>
+  <div class="pull-step"><div class="pull-num">2</div><div class="pull-body"><div class="pull-title">Search "Quotas" in the top search bar and select it</div></div></div>
+  <div class="pull-step"><div class="pull-num">3</div><div class="pull-body"><div class="pull-title">Select "Compute" (or the service type needed)</div><div class="pull-desc">Options include Storage, Networking, etc.</div></div></div>
+  <div class="pull-step"><div class="pull-num">4</div><div class="pull-body"><div class="pull-title">Filter by Subscription and Region</div></div></div>
+  <div class="pull-step" style="margin-bottom:16px;"><div class="pull-num">5</div><div class="pull-body"><div class="pull-title">Click <b>Export to CSV</b> in the top command bar</div></div></div>
 
   <!-- Currency note -->
   <div class="section-label">Currency changes &amp; reservations</div>
