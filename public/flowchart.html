@@ -1,117 +1,93 @@
 
 <style>
-  :root {
-    --color-text-primary: #f0f0f0;
-    --color-text-secondary: #a0a8b8;
-    --color-text-tertiary: #6b7385;
-    --color-background-primary: #1a1f2e;
-    --color-background-secondary: #232938;
-    --color-border-tertiary: #2e3447;
-    --color-border-secondary: #3a4257;
-    --color-background-info: rgba(56, 139, 253, 0.12);
-    --color-text-info: #79b8ff;
-    --color-border-info: rgba(56, 139, 253, 0.4);
-    --color-background-warning: rgba(210, 153, 34, 0.12);
-    --color-text-warning: #e3a840;
-    --color-border-warning: rgba(210, 153, 34, 0.45);
-    --color-background-success: rgba(63, 185, 80, 0.1);
-    --color-text-success: #56d364;
-    --color-border-success: rgba(63, 185, 80, 0.4);
-    --color-background-danger: rgba(220, 70, 70, 0.12);
-    --color-text-danger: #f08080;
-    --color-border-danger: rgba(220, 70, 70, 0.4);
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-mono: 'SF Mono', 'Fira Code', Consolas, monospace;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-sans); font-size: 15px; color: var(--color-text-primary); background: #111520; }
-  .tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
-  .tab-btn { padding: 9px 16px; border-radius: var(--border-radius-md); border: 1px solid var(--color-border-secondary); background: transparent; cursor: pointer; font-size: 13px; color: var(--color-text-secondary); transition: all .15s; white-space: nowrap; }
+  body { font-family: var(--font-sans, sans-serif); font-size: 14px; color: var(--color-text-primary); }
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tab-btn { padding: 8px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; cursor: pointer; font-size: 13px; color: var(--color-text-secondary); transition: all .15s; white-space: nowrap; }
   .tab-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
   .tab-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); font-weight: 500; }
   .tab-panel { display: none; } .tab-panel.active { display: block; }
-  .card { background: var(--color-background-primary); border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 18px 20px; margin-bottom: 14px; }
-  .card-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
-  .card-sub { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; }
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; margin-right: 4px; letter-spacing: .03em; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 16px; margin-bottom: 12px; }
+  .card-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .card-sub { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 500; margin-right: 4px; }
   .badge-paygo { background: var(--color-background-warning); color: var(--color-text-warning); }
   .badge-mcae  { background: var(--color-background-info);    color: var(--color-text-info); }
   .badge-csp   { background: var(--color-background-success); color: var(--color-text-success); }
   .badge-ea    { background: var(--color-background-danger);  color: var(--color-text-danger); }
-  .badge-misc  { background: var(--color-background-secondary); color: var(--color-text-secondary); border: 1px solid var(--color-border-secondary); }
+  .badge-misc  { background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); }
   .badge-blocked { background: var(--color-background-danger); color: var(--color-text-danger); }
   .steps { display: flex; flex-direction: column; gap: 0; }
-  .step { display: flex; gap: 14px; align-items: flex-start; }
+  .step { display: flex; gap: 12px; align-items: flex-start; }
   .step-line { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
-  .step-dot { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
-  .step-connector { width: 1px; height: 22px; background: var(--color-border-tertiary); margin: 3px 0; }
-  .step-body { padding-bottom: 18px; flex: 1; min-width: 0; }
-  .step-title { font-size: 14px; font-weight: 500; line-height: 1.45; }
-  .step-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.65; margin-top: 4px; }
-  .step-note { font-size: 12px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 8px 12px; margin-top: 8px; color: var(--color-text-secondary); }
+  .step-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+  .step-connector { width: 1px; height: 20px; background: var(--color-border-tertiary); margin: 2px 0; }
+  .step-body { padding-bottom: 16px; flex: 1; min-width: 0; }
+  .step-title { font-size: 13px; font-weight: 500; line-height: 1.4; }
+  .step-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; margin-top: 3px; }
+  .step-note { font-size: 11px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 6px 10px; margin-top: 6px; color: var(--color-text-secondary); }
   .dot-pump   { background: var(--color-background-info);    color: var(--color-text-info); }
   .dot-cust   { background: var(--color-background-warning); color: var(--color-text-warning); }
   .dot-ingram { background: var(--color-background-success); color: var(--color-text-success); }
   .dot-ms     { background: var(--color-background-danger);  color: var(--color-text-danger); }
   .dot-both   { background: var(--color-background-secondary); color: var(--color-text-secondary); }
-  .decision-q { font-size: 14px; font-weight: 500; }
-  .decision-hint { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; }
-  .decision-answers { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-  .ans-btn { padding: 7px 14px; border: 1px solid var(--color-border-secondary); border-radius: 99px; font-size: 13px; cursor: pointer; background: transparent; color: var(--color-text-primary); transition: all .15s; }
+  .decision-q { font-size: 13px; font-weight: 500; }
+  .decision-hint { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .decision-answers { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .ans-btn { padding: 5px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: 99px; font-size: 12px; cursor: pointer; background: transparent; color: var(--color-text-primary); transition: all .15s; }
   .ans-btn:hover { background: var(--color-background-secondary); }
-  .result-box { border-radius: var(--border-radius-md); padding: 14px 16px; margin-top: 12px; display: none; font-size: 13px; line-height: 1.65; }
+  .result-box { border-radius: var(--border-radius-md); padding: 12px 14px; margin-top: 10px; display: none; font-size: 12px; line-height: 1.6; }
   .result-box.show { display: block; }
-  .info-item { border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 10px; overflow: hidden; }
-  .info-header { padding: 13px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .info-item { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 10px; overflow: hidden; }
+  .info-header { padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
   .info-header:hover { background: var(--color-background-secondary); }
-  .info-label { font-size: 14px; font-weight: 500; }
-  .info-body { padding: 14px 16px; border-top: 1px solid var(--color-border-tertiary); display: none; font-size: 13px; color: var(--color-text-secondary); line-height: 1.8; }
+  .info-label { font-size: 13px; font-weight: 500; }
+  .info-body { padding: 10px 14px; border-top: 0.5px solid var(--color-border-tertiary); display: none; font-size: 12px; color: var(--color-text-secondary); line-height: 1.8; }
   .info-body.open { display: block; }
-  .code-pill { display: inline-block; background: var(--color-background-secondary); border-radius: 5px; padding: 2px 8px; font-family: var(--font-mono); font-size: 12px; color: var(--color-text-primary); border: 1px solid var(--color-border-secondary); }
-  .path-select { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-  .path-btn { padding: 7px 16px; border: 1px solid var(--color-border-secondary); border-radius: 99px; font-size: 13px; cursor: pointer; background: transparent; color: var(--color-text-secondary); transition: all .15s; }
+  .code-pill { display: inline-block; background: var(--color-background-secondary); border-radius: 4px; padding: 2px 7px; font-family: var(--font-mono, monospace); font-size: 11px; color: var(--color-text-primary); }
+  .path-select { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .path-btn { padding: 6px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: 99px; font-size: 12px; cursor: pointer; background: transparent; color: var(--color-text-secondary); transition: all .15s; }
   .path-btn:hover { background: var(--color-background-secondary); }
   .path-btn.active { background: var(--color-background-success); color: var(--color-text-success); border-color: var(--color-border-success); font-weight: 500; }
   .path-panel { display: none; } .path-panel.active { display: block; }
-  .who-tag { display: inline-block; font-size: 11px; padding: 2px 7px; border-radius: 99px; font-weight: 500; margin-left: 6px; vertical-align: middle; }
+  .who-tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 99px; font-weight: 500; margin-left: 6px; vertical-align: middle; }
   .who-pump   { background: var(--color-background-info);    color: var(--color-text-info); }
   .who-cust   { background: var(--color-background-warning); color: var(--color-text-warning); }
   .who-ingram { background: var(--color-background-success); color: var(--color-text-success); }
   .who-ms     { background: var(--color-background-danger);  color: var(--color-text-danger); }
-  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--color-text-tertiary); margin: 18px 0 10px; }
-  .tip-box { background: var(--color-background-info); border-left: 3px solid var(--color-border-info); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 10px 14px; margin-top: 10px; font-size: 13px; color: var(--color-text-info); line-height: 1.65; }
-  .warn-box { background: var(--color-background-warning); border-left: 3px solid var(--color-border-warning); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 10px 14px; margin-top: 10px; font-size: 13px; color: var(--color-text-warning); line-height: 1.65; }
-  .block-box { background: var(--color-background-danger); border-left: 3px solid var(--color-border-danger); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 10px 14px; margin-top: 8px; font-size: 13px; color: var(--color-text-danger); line-height: 1.65; }
-  .pull-step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
-  .pull-num { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-border-secondary); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; color: var(--color-text-secondary); }
+  .section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--color-text-tertiary); margin: 16px 0 8px; }
+  .tip-box { background: var(--color-background-info); border-left: 3px solid var(--color-border-info); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 8px 12px; margin-top: 8px; font-size: 12px; color: var(--color-text-info); line-height: 1.6; }
+  .warn-box { background: var(--color-background-warning); border-left: 3px solid var(--color-border-warning); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 8px 12px; margin-top: 8px; font-size: 12px; color: var(--color-text-warning); line-height: 1.6; }
+  .block-box { background: var(--color-background-danger); border-left: 3px solid var(--color-border-danger); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 8px 12px; margin-top: 6px; font-size: 12px; color: var(--color-text-danger); line-height: 1.6; }
+  .pull-step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+  .pull-num { width: 26px; height: 26px; border-radius: 50%; border: 0.5px solid var(--color-border-secondary); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; color: var(--color-text-secondary); }
   .pull-body { flex: 1; }
-  .pull-title { font-size: 14px; font-weight: 500; }
-  .pull-desc { font-size: 13px; color: var(--color-text-secondary); margin-top: 4px; line-height: 1.65; }
-  .method-tabs { display: flex; gap: 0; margin-bottom: 18px; border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); overflow: hidden; }
-  .method-btn { flex: 1; padding: 12px 14px; background: transparent; border: none; cursor: pointer; font-size: 13px; color: var(--color-text-secondary); transition: all .15s; text-align: left; border-right: 1px solid var(--color-border-tertiary); line-height: 1.4; }
+  .pull-title { font-size: 13px; font-weight: 500; }
+  .pull-desc { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; line-height: 1.6; }
+  .method-tabs { display: flex; gap: 0; margin-bottom: 16px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); overflow: hidden; }
+  .method-btn { flex: 1; padding: 10px 12px; background: transparent; border: none; cursor: pointer; font-size: 12px; color: var(--color-text-secondary); transition: all .15s; text-align: left; border-right: 0.5px solid var(--color-border-tertiary); line-height: 1.4; }
   .method-btn:last-child { border-right: none; }
   .method-btn:hover { background: var(--color-background-secondary); }
   .method-btn.active { background: var(--color-background-secondary); color: var(--color-text-primary); }
-  .method-btn .m-label { font-weight: 500; font-size: 14px; display: block; }
-  .method-btn .m-sub { font-size: 12px; color: var(--color-text-tertiary); margin-top: 3px; display: block; }
+  .method-btn .m-label { font-weight: 500; font-size: 13px; display: block; }
+  .method-btn .m-sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; display: block; }
   .method-btn.active .m-sub { color: var(--color-text-secondary); }
   .method-panel { display: none; } .method-panel.active { display: block; }
-  .csv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
-  .csv-card { background: var(--color-background-secondary); border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px 14px; }
-  .csv-num { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); margin-bottom: 4px; }
-  .csv-title { font-size: 13px; font-weight: 500; }
-  .csv-group { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; }
-  .misc-pill { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 500; margin: 2px 3px 2px 0; border: 1px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-secondary); }
+  .csv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .csv-card { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+  .csv-num { font-size: 10px; font-weight: 500; color: var(--color-text-tertiary); margin-bottom: 3px; }
+  .csv-title { font-size: 12px; font-weight: 500; }
+  .csv-group { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .misc-pill { display: inline-block; padding: 2px 9px; border-radius: 99px; font-size: 11px; font-weight: 500; margin: 2px 3px 2px 0; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-secondary); }
 </style>
 
-<div style="padding: 1.5rem 0; max-width: 900px; margin: 0 auto;">
+<div style="padding: 1rem 0;">
 <div class="tabs">
   <button class="tab-btn active" onclick="switchTab('identify')">1. Identify billing type</button>
   <button class="tab-btn" onclick="switchTab('estimate')">2. Run an estimate</button>
   <button class="tab-btn" onclick="switchTab('onboard')">3. Onboarding flows</button>
   <button class="tab-btn" onclick="switchTab('gather')">4. Info to gather</button>
+  <button class="tab-btn" onclick="switchTab('roles')">5. Billing roles &amp; quotas</button>
 </div>
 
 <!-- TAB 1: IDENTIFY -->
@@ -145,7 +121,7 @@
 
     <div class="card" style="border-left:3px solid #888780; grid-column: 1 / -1;">
       <div style="margin-bottom:10px;"><span class="badge badge-misc">Misc / Other</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
 
         <div>
           <div style="font-size:12px;font-weight:500;margin-bottom:4px;"><span class="misc-pill">Sponsorship</span> Microsoft for Startups</div>
@@ -323,6 +299,71 @@
   <div class="info-item"><div class="info-header" onclick="toggleInfo('i7')"><div><div class="info-label">CSP→CSP only: current CSP tenant ID</div><div style="font-size:11px;color:var(--color-text-tertiary);">Not visible in portal — customer must ask their CSP</div></div><span style="font-size:14px;color:var(--color-text-tertiary);" id="i7-arrow">+</span></div><div class="info-body" id="i7">Not visible in the Azure portal.<br><br>Tell them to ask: <b>"We need your CSP Tenant ID for a billing transition."</b><br><br>Some CSPs push back — customer escalating internally helps.</div></div>
   <div class="info-item"><div class="info-header" onclick="toggleInfo('i8')"><div><div class="info-label">Special relationships (Sponsorship, MAC, ISV)</div><div style="font-size:11px;color:var(--color-text-tertiary);">Sponsorship and MAC = blocked until expiry</div></div><span style="font-size:14px;color:var(--color-text-tertiary);" id="i8-arrow">+</span></div><div class="info-body" id="i8"><b>Sponsorship / Microsoft for Startups:</b> Azure credits cover their spend. Cannot work with Pump until credits expire. Get the expiry date and set a follow-up reminder.<br><br><b>MAC / EDP:</b> Minimum Azure spend commitment in exchange for discounts. Cannot work with Pump until MAC expires. Get the expiry date and set a follow-up reminder.<br><br><b>ISV:</b> Special Microsoft relationship — co-sell, marketplace benefits, dedicated resources. Complexity varies. Escalate to Ingram to assess what would be affected in a CSP transition.</div></div>
 </div>
+
+</div>
+
+<!-- TAB 5: BILLING ROLES & QUOTAS -->
+<div class="tab-panel" id="tab-roles">
+
+  <div class="card"><div class="card-title">Adding an Identity via Entra ID &amp; Granting Billing Account Owner Role</div><div class="card-sub">The user who accepts the CSP transfer request must be the Billing Account Owner on the MCA-E billing account. If the right person doesn't have that role, the transfer link will fail or be unacceptable.</div></div>
+
+  <!-- Considerations & Tips -->
+  <div class="section-label">Considerations &amp; tips and tricks</div>
+  <div class="warn-box" style="margin-bottom:8px;"><b>Same person rule:</b> The person who accepts the MCA-E proposal link must be the same person who accepts the CSP transfer request. Do not split these between different users — it will fail.</div>
+  <div class="warn-box" style="margin-bottom:16px;"><b>Tenant requirement:</b> To accept an MCA-E, the user must belong to the correct tenant — the one that holds the billing account. A guest/external account cannot hold the Billing Account Owner role. If the right person is in a different tenant, a member account must be created for them in the billing tenant first.</div>
+
+  <!-- Step 1: Entra ID -->
+  <div class="section-label">Step 1 — Add the identity in Entra ID (if the user doesn't already exist)</div>
+  <div class="pull-step"><div class="pull-num">1</div><div class="pull-body"><div class="pull-title">Go to Entra ID</div><div class="pull-desc">Navigate to <span class="code-pill">entra.microsoft.com</span> or search "Microsoft Entra ID" in the Azure portal.</div></div></div>
+  <div class="pull-step"><div class="pull-num">2</div><div class="pull-body"><div class="pull-title">Identity → Users → All Users</div></div></div>
+  <div class="pull-step"><div class="pull-num">3</div><div class="pull-body"><div class="pull-title">+ New user → Create new user</div><div class="pull-desc">Or <b>Invite external user</b> if they're outside the tenant — but note guest accounts cannot hold billing roles for transfer purposes (see considerations above).</div></div></div>
+  <div class="pull-step"><div class="pull-num">4</div><div class="pull-body"><div class="pull-title">Fill in details</div><div class="pull-desc">• Display name<br>• User principal name (e.g., <span class="code-pill">admin@contoso.onmicrosoft.com</span>)<br>• Set a temporary password</div></div></div>
+  <div class="pull-step" style="margin-bottom:16px;"><div class="pull-num">5</div><div class="pull-body"><div class="pull-title">Click Create</div></div></div>
+
+  <!-- Step 2: Billing Account Owner -->
+  <div class="section-label">Step 2 — Assign Billing Account Owner role</div>
+  <div class="pull-step"><div class="pull-num">1</div><div class="pull-body"><div class="pull-title">Azure Portal → Cost Management + Billing</div></div></div>
+  <div class="pull-step"><div class="pull-num">2</div><div class="pull-body"><div class="pull-title">Select the correct Billing Account (the MCA-E one)</div><div class="pull-desc">Under Billing scope, select the MCA-E billing account.</div></div></div>
+  <div class="pull-step"><div class="pull-num">3</div><div class="pull-body"><div class="pull-title">Left menu → Access control (IAM)</div></div></div>
+  <div class="pull-step"><div class="pull-num">4</div><div class="pull-body"><div class="pull-title">+ Add → Add role assignment</div><div class="pull-desc">Select role: <b>Billing account owner</b>. Search for and select the user. Click Save.</div></div></div>
+
+  <!-- Key rules table -->
+  <div class="section-label" style="margin-top:4px;">Key rules</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+    <div class="card"><div class="card-title">Must be in the same tenant</div><div class="card-sub">The Billing Account Owner must be a <b>member user</b> in the tenant that holds the MCA-E billing account. Guest/B2B accounts cannot hold billing roles for transfer purposes.</div></div>
+    <div class="card"><div class="card-title">Global Admin ≠ Billing Owner</div><div class="card-sub">Being an Entra Global Admin does <b>not</b> automatically make someone a Billing Account Owner — they are separate roles that must be assigned independently.</div></div>
+    <div class="card"><div class="card-title">Multiple owners allowed</div><div class="card-sub">There can be multiple Billing Account Owners, but only one "true" owner via the ownership transfer flow.</div></div>
+    <div class="card"><div class="card-title">Email access required</div><div class="card-sub">The billing owner must have access to their email — the transfer link is sent via email and expires.</div></div>
+  </div>
+
+  <!-- Quick checklist -->
+  <div class="section-label">Quick checklist before initiating the transfer</div>
+  <div class="card">
+    <div class="card-sub" style="line-height:2;">
+      ☐ &nbsp;Correct billing account identified (the MCA-E one, not a PAYGO profile)<br>
+      ☐ &nbsp;User exists as a <b>member</b> (not guest) in that tenant<br>
+      ☐ &nbsp;User has Billing Account Owner role under Cost Management + Billing → Access control (IAM)<br>
+      ☐ &nbsp;User has access to their email (transfer link is sent via email)<br>
+      ☐ &nbsp;Confirmed this is the <b>same person</b> who will accept both the MCA-E and the CSP transfer
+    </div>
+  </div>
+
+  <!-- Export quotas -->
+  <div class="section-label" style="margin-top:20px;">Export quotas</div>
+  <div class="tip-box" style="margin-bottom:12px;"><b>Why export quotas?</b> Quotas are reset when a subscription moves between billing types or tenants. Exporting before the transfer gives you a record to request quota restoration if needed.</div>
+  <div class="card"><div class="card-title">Method 1 — Azure Portal (quick, visual, per-region)</div>
+    <div class="card-sub" style="margin-top:6px;">
+      <div class="pull-step"><div class="pull-num">1</div><div class="pull-body"><div class="pull-title">Go to <span class="code-pill">portal.azure.com</span></div></div></div>
+      <div class="pull-step"><div class="pull-num">2</div><div class="pull-body"><div class="pull-title">Search "Quotas" in the top search bar and select it</div></div></div>
+      <div class="pull-step"><div class="pull-num">3</div><div class="pull-body"><div class="pull-title">Select "Compute" (or the service type needed)</div><div class="pull-desc">Options include Storage, Networking, etc.</div></div></div>
+      <div class="pull-step"><div class="pull-num">4</div><div class="pull-body"><div class="pull-title">Filter by Subscription and Region</div></div></div>
+      <div class="pull-step"><div class="pull-num">5</div><div class="pull-body"><div class="pull-title">Click Export to CSV in the top command bar</div></div></div>
+    </div>
+  </div>
+
+  <!-- Currency note -->
+  <div class="section-label">Currency changes &amp; reservations</div>
+  <div class="warn-box">If the billing currency changes (e.g., GBP → EUR, AUD → USD), <b>all existing reservations must be repurchased</b> — they cannot be migrated across currencies. Identify any active reservations before the transfer and flag this to the customer.</div>
 
 </div>
 
