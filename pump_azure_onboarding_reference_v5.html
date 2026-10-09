@@ -117,6 +117,9 @@
   <button class="tab-btn" onclick="switchTab('onboard')">3. Onboarding flows</button>
   <button class="tab-btn" onclick="switchTab('gather')">4. Info to gather</button>
   <button class="tab-btn" onclick="switchTab('roles')">5. Billing roles &amp; quotas</button>
+  <button class="tab-btn" onclick="switchTab('sales-friction')">6. Avoid sales friction (pre-onboarding)</button>
+  <button class="tab-btn" onclick="switchTab('post-friction')">7. Avoid post-onboarding friction</button>
+  <button class="tab-btn" onclick="switchTab('advanced')">8. Other advanced topics</button>
 </div>
 
 <!-- TAB 1: IDENTIFY -->
@@ -390,6 +393,116 @@
   <!-- Currency note -->
   <div class="section-label">Currency changes &amp; reservations</div>
   <div class="warn-box">If the billing currency changes (e.g., GBP → EUR, AUD → USD), <b>all existing reservations must be repurchased</b> — they cannot be migrated across currencies. Identify any active reservations before the transfer and flag this to the customer.</div>
+
+</div>
+
+<!-- TAB 6: AVOID SALES FRICTION (PRE-ONBOARDING) -->
+<div class="tab-panel" id="tab-sales-friction">
+
+  <div class="card"><div class="card-title">Avoid sales friction (pre-onboarding)</div><div class="card-sub">Checks to run before the onboarding call. Both are documented by Ingram — ask for the current links if you don't have them bookmarked.</div></div>
+
+  <!-- Resource extract -->
+  <div class="section-label">Resource extract</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">What it is</div><div class="card-sub">A CSV of all the customer's Azure resources, downloaded from the Azure console. (Includes some marketplace detail, but not enough — pull marketplace separately.)</div></div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">Why to run it</div><div class="card-sub">Catches resources that won't transfer — e.g., an old VM from 2012 that isn't on the current shelf anymore. Even off-the-shelf Microsoft resources can be stuck on legacy SKUs.</div></div>
+  <div class="tip-box" style="margin-bottom:16px;"><b>If something won't transfer:</b> rare, but on a large enough deal it's fair to pull in a solutions architect to help the customer reconcile.</div>
+
+  <!-- Marketplace pull -->
+  <div class="section-label">Marketplace pull</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">What it is</div><div class="card-sub">A separate report (not what the resource extract shows) with full detail on the customer's marketplace purchases.</div></div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">Why to run it</div><div class="card-sub">Marketplace purchases are the single most common cause of transfer blockers that only surface at the finish line.</div></div>
+  <div class="block-box" style="margin-bottom:16px;"><b>Case study:</b> one rep had a deal push <b>four months in a row</b> because of marketplace issues that would have surfaced in a pre-onboarding pull.</div>
+
+  <!-- Why both -->
+  <div class="section-label">Why both are non-negotiable</div>
+  <div class="warn-box" style="margin-bottom:8px;"><b>Forecasting:</b> it's impossible to forecast accurately without both. Without them you'll run a full onboarding call, finish GDAP/AOBO, and then the transfer tool simply refuses to move the subscriptions — now you have an unhappy customer and a slipped quarter.</div>
+  <div class="tip-box"><b>Workflow:</b> run both as part of the pre-call checklist. If anything surfaces that will block transfer, resolve it (or set expectations with the customer) before you book the onboarding call.</div>
+
+</div>
+
+<!-- TAB 7: AVOID POST-ONBOARDING FRICTION -->
+<div class="tab-panel" id="tab-post-friction">
+
+  <div class="card"><div class="card-title">Avoid post-onboarding friction</div><div class="card-sub">Four things reset or need follow-through on transfer. Handle them proactively — don't make the customer discover them.</div></div>
+
+  <!-- Billing data -->
+  <div class="section-label">1. Billing data resets</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-sub">Historical billing data does not carry over to the new billing profile. Analogous to an AWS org migration.</div></div>
+  <div class="warn-box" style="margin-bottom:16px;"><b>Action:</b> have the customer <b>export all historical billing data before the transfer.</b> No customer has been irate about this, but they do ask "why can't I see my billing data?" after — no reason to cause the friction.</div>
+
+  <!-- Quotas -->
+  <div class="section-label">2. Quotas reset</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-sub">Service quotas reset to defaults on transfer. The customer may suddenly be unable to spin up what they were running the day before.</div></div>
+  <div class="warn-box" style="margin-bottom:8px;"><b>Action:</b> <b>export quotas before the transfer</b>, hand them to CSM, and submit a support ticket to restore them as the <b>first post-onboarding support ticket</b>.</div>
+  <div class="tip-box" style="margin-bottom:16px;">Export steps live in <a href="javascript:switchTab('roles')" style="color:var(--color-text-info);">Tab 5 — Billing roles &amp; quotas</a>.</div>
+
+  <!-- Commitments / currency -->
+  <div class="section-label">3. Commitments / reservations (only on currency change)</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-sub">If the billing currency changes on transfer, <b>all reservations must be repurchased</b> — they do not migrate across currencies.</div></div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">Default behavior</div><div class="card-sub">An AUD tenant pays AUD, EUR pays EUR, USD pays USD. No currency change on transfer.</div></div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">Where it goes wrong</div><div class="card-sub">A multi-tenant customer with tenants in different regions all tied to <b>one billing profile paying in a single currency</b> (e.g., nine global tenants billed in USD). On transfer, each tenant moves to a billing profile billed in its native currency — triggering a currency change you didn't expect.</div></div>
+  <div class="warn-box" style="margin-bottom:8px;"><b>Europe gotcha:</b> Switzerland does <b>not</b> use the Euro. England does <b>not</b> use the Euro. Confirm the billing currency on the <b>profile</b>, not the geography of the tenant.</div>
+  <div class="block-box" style="margin-bottom:16px;"><b>Case study:</b> an unexpected currency change on transfer wiped out reservations on legacy instances. Microsoft would not let the customer repurchase (legacy SKUs). Material customer tension — fully preventable. <b>Always check billing currency on the profile before transfer.</b></div>
+
+  <!-- GDAP/AOBO follow-up -->
+  <div class="section-label">4. GDAP + AOBO follow-through (if not completed on the call)</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-sub"><b>Best practice:</b> accept GDAP and AOBO <b>before</b> the billing transfer. Use the call as the last resort. See <a href="javascript:switchTab('advanced')" style="color:var(--color-text-info);">Tab 8</a> for the deep dive on both.</div></div>
+  <div class="warn-box" style="margin-bottom:8px;"><b>If they aren't done:</b> it will cause support issues and <b>Pump does not get revenue (and you do not get commission)</b> until they're complete. Don't let it drift.</div>
+  <div class="block-box" style="margin-bottom:16px;"><b>AOBO is per-subscription.</b> If the customer skips the script on any subscription, Pump gets no revenue on that subscription. Walk every subscription with them.</div>
+
+  <!-- What doesn't change -->
+  <div class="section-label">What doesn't change (reassurance for the customer)</div>
+  <div class="tip-box"><b>Tenant ID and subscription IDs are preserved.</b> Only the billing profile is new. Closest AWS analogy: an org migration where the account IDs stay the same.</div>
+
+</div>
+
+<!-- TAB 8: OTHER ADVANCED TOPICS -->
+<div class="tab-panel" id="tab-advanced">
+
+  <div class="card"><div class="card-title">Other advanced topics (Azuremaxxing 202)</div><div class="card-sub">Deep dives on GDAP, AOBO, order of operations, and the mental model behind billing profiles vs tenants.</div></div>
+
+  <!-- Order of operations -->
+  <div class="section-label">Order of operations</div>
+  <div class="card" style="margin-bottom:8px;">
+    <div class="card-sub" style="line-height:1.8;">
+      <b>1. Relationship link first.</b> Customer must accept the Ingram CSP relationship before anything else — you can't onboard until this is done.<br>
+      <b>2. GDAP + AOBO on a dedicated call with the customer, before the billing-transfer call</b> (best practice). <b>Do this live, not async</b> — permission issues are common (Global Admin ≠ Billing Owner, restricted sets, wrong tenant, etc.) and you need to troubleshoot in real time. Scheduling three people on the transfer call is hard — don't waste it on permission problems.<br>
+      <b>3. Billing transfer on the transfer call.</b> Use that call as the last resort for GDAP/AOBO only if they weren't completed on the earlier call.
+    </div>
+  </div>
+  <div class="tip-box" style="margin-bottom:16px;"><b>Rule of thumb:</b> aim for pre-call completion 99/100 times. The 1/100 async fallback is for when the alternative is losing the onboarding slot — not a default workflow.</div>
+
+  <!-- GDAP -->
+  <div class="section-label">GDAP — Granular Delegated Admin Permissions</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">What it is</div><div class="card-sub">The permissions Ingram needs to provide support. Comes in two flavors: a <b>standard (large)</b> set and a <b>restricted (small)</b> set.</div></div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">Standard vs restricted</div><div class="card-sub"><b>Standard</b> is comprehensive and recommended — basically keys to the kingdom. <b>Restricted</b> is reasonable for security-sensitive customers to request, but <b>will cause support delays</b>.</div></div>
+  <div class="warn-box" style="margin-bottom:8px;"><b>If a customer wants restricted GDAP:</b> get written acknowledgment over email that they understand support will be slower. Otherwise they'll ask "why is this taking so long?" later and you'll have no paper trail.</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">Technically required for onboarding?</div><div class="card-sub"><b>No.</b> But it's strongly recommended before the transfer. If it fails on the call (link not working, wrong permissions, etc.), don't block the onboarding — follow up after.</div></div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">Where the GDAP link comes from</div><div class="card-sub">Automatically emailed to the customer after you provision a subscription. If they can't find it or need a restricted permission set, reach out to Ingram — they can generate a custom link.</div></div>
+  <div class="warn-box" style="margin-bottom:16px;"><b>Common gotcha:</b> customer believes they have the right permissions because they're a Global Admin — but Global Admin ≠ Billing Owner. They may need to assign themselves Billing Owner on the billing profile first.</div>
+
+  <!-- AOBO -->
+  <div class="section-label">AOBO — Admin On Behalf Of</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">What it is</div><div class="card-sub">A script the customer runs on <b>each subscription</b> they've onboarded. Grants additional permissions (quota request contributor, etc.) mostly for support.</div></div>
+  <div class="block-box" style="margin-bottom:8px;"><b>Must run on every subscription.</b> If they skip one, Pump does not get revenue on that subscription. Walk through the list with them.</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-title">Technically required for onboarding?</div><div class="card-sub"><b>No.</b> But there is essentially no excuse to skip it on the call — unless the customer has to drop (board meeting, hard stop, etc.). If they do, it becomes your responsibility to get it finished async.</div></div>
+  <div class="tip-box" style="margin-bottom:16px;"><b>Async handoff:</b> if the customer is proficient with the Azure console, the AOBO instructions are clear enough for them to run themselves. Send them over, confirm completion, and don't move on until every subscription is covered — <b>Pump doesn't get revenue (and you don't get commission) until GDAP + AOBO are complete.</b></div>
+
+  <!-- Billing profile vs tenants -->
+  <div class="section-label">Mental model — billing profile vs tenants</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+    <div class="card"><div class="card-title">Tenant ≈ AWS account</div><div class="card-sub">A tenant is where the subscriptions and resources live. Tenant ID doesn't change on transfer.</div></div>
+    <div class="card"><div class="card-title">Billing profile ≈ AWS org (loose)</div><div class="card-sub">The billing entity that produces the invoice. Each tenant moves to a <b>new</b> billing profile when it transfers to CSP.</div></div>
+  </div>
+  <div class="tip-box" style="margin-bottom:16px;"><b>Consolidation:</b> if the customer is direct with Microsoft and has multiple tenants, consolidate them into one billing profile <b>before</b> transferring to CSP — otherwise they go from one invoice to many (nine tenants → nine invoices). Note: you generally can't consolidate tenants across regions.</div>
+
+  <!-- Philosophy -->
+  <div class="section-label">Philosophy — onboard now, fix later</div>
+  <div class="card" style="margin-bottom:8px;"><div class="card-sub" style="line-height:1.8;">
+    <b>Stuff breaks in a million ways on Azure.</b> The onboarding tool can work today and fail tomorrow — a marketplace change, a resource that silently became unsupported, a quirk in the customer's tenant. A mild degree of discomfort is normal — nobody is ever 100% certain about anything in Azure land.<br><br>
+    <b>If an onboarding is doable right now, do it right now.</b> If GDAP/AOBO is stuck but the transfer will actually go through, finish the transfer. The window where everything lines up may not exist tomorrow.<br><br>
+    <b>Onboard now, fix later.</b> It's then your responsibility to close out GDAP + AOBO after the call. Pump does not get revenue (and you do not get commission) until they're done — but a half-onboarded customer is still ahead of a customer whose onboarding slipped another month because something broke in Azure overnight.
+  </div></div>
 
 </div>
 
